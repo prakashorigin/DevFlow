@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { getHealth } from "../../services/healthService";
 import {
   FolderKanban,
   CheckSquare,
@@ -8,7 +10,24 @@ import {
 } from "lucide-react";
 
 import StatCard from "../../components/ui/StatCard";
+const [apiStatus, setApiStatus] = useState("Checking API...");
 
+useEffect(() => {
+  const checkApi = async () => {
+    try {
+      const response = await getHealth();
+
+      if (response.success) {
+        setApiStatus("Backend Connected");
+      }
+    } catch (error) {
+      console.error("Backend connection failed:", error);
+      setApiStatus("Backend Offline");
+    }
+  };
+
+  checkApi();
+}, []);
 function Dashboard() {
   return (
     <div className="p-4 md:p-6 lg:p-8">
@@ -26,7 +45,15 @@ function Dashboard() {
           Here's what's happening across your development workspace.
         </p>
       </div>
+      <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-slate-100 px-4 py-2 text-sm dark:bg-slate-800">
+        <span
+          className={`h-2.5 w-2.5 rounded-full ${
+            apiStatus === "Backend Connected" ? "bg-green-500" : "bg-red-500"
+          }`}
+        />
 
+        <span className="text-slate-600 dark:text-slate-300">{apiStatus}</span>
+      </div>
       {/* Statistics */}
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard
