@@ -1,10 +1,10 @@
-import { createContext, useContext, useEffect, useState } from "react";
-
-const ThemeContext = createContext();
+import { useEffect, useState } from "react";
+import { ThemeContext } from "./theme";
 
 export function ThemeProvider({ children }) {
   const [darkMode, setDarkMode] = useState(() => {
-    return localStorage.getItem("devflow-theme") === "dark";
+    const savedTheme = localStorage.getItem("devflow-theme");
+    return savedTheme ? savedTheme === "dark" : true;
   });
 
   useEffect(() => {
@@ -26,8 +26,4 @@ export function ThemeProvider({ children }) {
       {children}
     </ThemeContext.Provider>
   );
-}
-
-export function useTheme() {
-  return useContext(ThemeContext);
 }

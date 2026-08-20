@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const env = {
-  port: process.env.PORT || 6001,
+  port: Number(process.env.PORT) || 6001,
 
   clientUrl: process.env.CLIENT_URL || "http://localhost:4001",
 

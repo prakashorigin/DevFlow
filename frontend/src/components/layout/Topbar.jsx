@@ -1,6 +1,6 @@
 import { Menu, Search, Bell, Sun, Moon, ChevronDown } from "lucide-react";
 
-import { useTheme } from "../../context/ThemeContext";
+import { useTheme } from "../../context/theme";
 
 function Topbar({ onMenuClick }) {
   const { darkMode, toggleTheme } = useTheme();
