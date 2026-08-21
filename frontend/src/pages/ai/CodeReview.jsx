@@ -1,10 +1,3 @@
-function CodeReview() {
-  return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold">AI Code Review</h1>
-      <p className="mt-2 text-slate-500">Analyze your code with AI.</p>
-    </div>
-  );
-}
-
-export default CodeReview;
+import { useState } from "react";
+import api from "../../services/api";
+export default function CodeReview() { const [result, setResult] = useState(null); const submit = async (event) => { event.preventDefault(); const values = Object.fromEntries(new FormData(event.currentTarget)); const { data } = await api.post("/ai/code-review", values); setResult(data.data); }; return <div className="min-h-[calc(100vh-4rem)] bg-[#0b1220] p-6 text-white"><h1 className="text-3xl font-semibold">AI Code Review</h1><p className="mt-2 text-slate-400">Get focused quality, security, and maintainability feedback.</p><form onSubmit={submit} className="mt-6 rounded-2xl border border-slate-800 bg-slate-900 p-5"><select name="language" defaultValue="JavaScript" className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm">{["JavaScript", "TypeScript", "Python", "Java", "C++", "React", "Node.js"].map((language) => <option key={language}>{language}</option>)}</select><textarea name="code" required placeholder="Paste code to review…" className="mt-4 min-h-64 w-full rounded-xl border border-slate-700 bg-slate-950 p-4 font-mono text-sm text-slate-200" /><button className="mt-4 rounded-xl bg-blue-500 px-4 py-2.5 font-semibold">Analyze code</button></form>{result && <section className="mt-6 rounded-2xl border border-slate-800 bg-slate-900 p-5"><h2 className="text-xl font-semibold">Overall score: {result.score}/100</h2><div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">{Object.entries(result.metrics).map(([key, value]) => <div key={key} className="rounded-xl bg-slate-800 p-3"><p className="capitalize text-slate-400">{key}</p><strong className="text-lg">{value}</strong></div>)}</div><div className="mt-5 space-y-3">{result.findings.map((finding) => <article key={finding.message} className="rounded-lg border border-slate-800 p-3 text-sm"><span className="font-medium text-blue-300">{finding.level}</span><p className="mt-1 text-slate-300">{finding.message}</p></article>)}</div></section>}</div>; }

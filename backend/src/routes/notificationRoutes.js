@@ -1,0 +1,11 @@
+import express from "express";
+import Notification from "../models/Notification.js";
+import { protect } from "../middleware/auth.js";
+import AppError from "../utils/AppError.js";
+const router = express.Router();
+router.use(protect);
+router.get("/", async (req, res, next) => { try { res.json({ success: true, data: await Notification.find({ recipient: req.user._id }).sort({ createdAt: -1 }) }); } catch (error) { next(error); } });
+router.put("/read-all", async (req, res, next) => { try { await Notification.updateMany({ recipient: req.user._id, read: false }, { read: true }); res.json({ success: true }); } catch (error) { next(error); } });
+router.put("/:id/read", async (req, res, next) => { try { const notification = await Notification.findOneAndUpdate({ _id: req.params.id, recipient: req.user._id }, { read: true }, { new: true }); if (!notification) throw new AppError("Notification not found", 404); res.json({ success: true, data: notification }); } catch (error) { next(error); } });
+router.delete("/:id", async (req, res, next) => { try { await Notification.deleteOne({ _id: req.params.id, recipient: req.user._id }); res.status(204).end(); } catch (error) { next(error); } });
+export default router;

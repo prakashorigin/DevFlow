@@ -1,0 +1,11 @@
+import express from "express";
+import User from "../models/User.js";
+import { protect, allowRoles } from "../middleware/auth.js";
+import AppError from "../utils/AppError.js";
+import { recordActivity } from "../services/activityService.js";
+const router = express.Router(); router.use(protect);
+router.get("/", async (_req, res, next) => { try { res.json({ success: true, data: await User.find({ isActive: true }).select("name username email avatar role jobTitle") }); } catch (error) { next(error); } });
+router.post("/invite", allowRoles("admin", "manager"), async (req, res, next) => { try { const user = await User.findOne({ email: req.body.email }); if (!user) throw new AppError("A user with that email has not registered yet", 404); user.role = req.body.role || "member"; await user.save({ validateBeforeSave: false }); await recordActivity(req.user._id, "team_invite", `Updated ${user.name}'s team role`); res.status(201).json({ success: true, data: user }); } catch (error) { next(error); } });
+router.put("/:id", allowRoles("admin", "manager"), async (req, res, next) => { try { const user = await User.findByIdAndUpdate(req.params.id, { role: req.body.role }, { new: true, runValidators: true }); if (!user) throw new AppError("Member not found", 404); res.json({ success: true, data: user }); } catch (error) { next(error); } });
+router.delete("/:id", allowRoles("admin"), async (req, res, next) => { try { await User.findByIdAndUpdate(req.params.id, { isActive: false }); res.status(204).end(); } catch (error) { next(error); } });
+export default router;

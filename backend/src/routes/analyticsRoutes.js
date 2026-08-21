@@ -1,0 +1,10 @@
+import express from "express";
+import { protect } from "../middleware/auth.js";
+import { dashboard } from "../controllers/analyticsController.js";
+const router = express.Router();
+router.use(protect);
+router.get("/dashboard", dashboard);
+router.get("/projects", dashboard);
+router.get("/tasks", dashboard);
+router.get("/productivity", dashboard);
+export default router;

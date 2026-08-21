@@ -13,6 +13,15 @@ const userSchema = new mongoose.Schema(
       maxlength: 100,
     },
 
+    username: {
+      type: String,
+      required: [true, "Username is required"],
+      unique: true,
+      trim: true,
+      lowercase: true,
+      match: [/^[a-z0-9_]{3,30}$/, "Username must contain 3-30 letters, numbers, or underscores"],
+    },
+
     email: {
       type: String,
       required: [true, "Email is required"],
@@ -34,9 +43,11 @@ const userSchema = new mongoose.Schema(
       default: "",
     },
 
+    phone: { type: String, trim: true, default: "" },
+
     role: {
       type: String,
-      enum: ["developer", "manager", "admin"],
+      enum: ["developer", "manager", "admin", "designer", "member", "viewer"],
       default: "developer",
     },
 
@@ -45,6 +56,16 @@ const userSchema = new mongoose.Schema(
       maxlength: 500,
       default: "",
     },
+
+    location: { type: String, trim: true, maxlength: 100, default: "" },
+    jobTitle: { type: String, trim: true, maxlength: 100, default: "" },
+    website: { type: String, trim: true, default: "" },
+    github: { type: String, trim: true, default: "" },
+    linkedin: { type: String, trim: true, default: "" },
+    theme: { type: String, enum: ["light", "dark", "system"], default: "system" },
+    emailVerified: { type: Boolean, default: false },
+    phoneVerified: { type: Boolean, default: false },
+    refreshTokenHash: { type: String, select: false, default: "" },
 
     isActive: {
       type: Boolean,

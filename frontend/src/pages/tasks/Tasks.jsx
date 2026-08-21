@@ -1,10 +1,2 @@
-function Tasks() {
-  return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold">Tasks</h1>
-      <p className="mt-2 text-slate-500">Manage your development tasks.</p>
-    </div>
-  );
-}
-
-export default Tasks;
+import ResourcePage from "../../components/common/ResourcePage";
+export default function Tasks() { return <ResourcePage title="Tasks" subtitle="Keep delivery moving from to-do to done." endpoint="/tasks" defaultStatus="todo" fields={[{ name: "title", label: "Task title", required: true }, { name: "project", label: "Project ID", required: true }]} />; }

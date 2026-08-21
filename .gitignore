@@ -1,0 +1,22 @@
+# Dependencies and build output
+**/node_modules/
+**/dist/
+**/coverage/
+
+# Environment and local configuration
+**/.env
+**/.env.local
+**/.env.*.local
+!**/.env.example
+
+# Logs and runtime files
+*.log
+logs/
+pids/
+*.pid
+
+# Editor and operating-system files
+.DS_Store
+.idea/
+.vscode/
+*.swp

@@ -1,0 +1,11 @@
+import express from "express";
+import { body } from "express-validator";
+import { protect } from "../middleware/auth.js";
+import { validate } from "../middleware/validate.js";
+import { changePassword, getMe, updateMe } from "../controllers/userController.js";
+const router = express.Router();
+router.use(protect);
+router.get("/me", getMe);
+router.put("/me", [body("name").optional().trim().isLength({ min: 2 }), body("username").optional().matches(/^[a-zA-Z0-9_]{3,30}$/), validate], updateMe);
+router.put("/me/password", [body("currentPassword").notEmpty(), body("password").isLength({ min: 8 }), validate], changePassword);
+export default router;

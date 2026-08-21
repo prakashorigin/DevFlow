@@ -1,37 +1,13 @@
-function Login() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-100">
-      <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-lg">
-        <h1 className="text-3xl font-bold text-slate-900">
-          Welcome to DevFlow
-        </h1>
+import { useState } from "react";
+import { Eye, EyeOff, LogIn } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { useAuth } from "../../context/AuthContext";
 
-        <p className="mt-2 text-slate-500">
-          Login to your developer workspace.
-        </p>
-
-        <div className="mt-6">
-          <input
-            type="email"
-            placeholder="Email"
-            className="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-500"
-          />
-        </div>
-
-        <div className="mt-4">
-          <input
-            type="password"
-            placeholder="Password"
-            className="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-500"
-          />
-        </div>
-
-        <button className="mt-6 w-full rounded-lg bg-blue-600 px-4 py-3 font-semibold text-white hover:bg-blue-700">
-          Login
-        </button>
-      </div>
-    </div>
-  );
+export default function Login() {
+  const { login } = useAuth(); const navigate = useNavigate(); const [show, setShow] = useState(false); const [error, setError] = useState(""); const [loading, setLoading] = useState(false);
+  const submit = async (event) => { event.preventDefault(); setLoading(true); setError(""); const form = new FormData(event.currentTarget); try { await login({ identifier: form.get("identifier"), password: form.get("password") }); navigate("/dashboard"); } catch (err) { setError(err.response?.data?.message || "Unable to sign in. Try again."); } finally { setLoading(false); } };
+  return <AuthShell title="Welcome back" subtitle="Sign in to your DevFlow workspace."><form onSubmit={submit} className="space-y-4"><Field label="Email, username, or phone" name="identifier" required /><Field label="Password" name="password" type={show ? "text" : "password"} required action={<button type="button" onClick={() => setShow(!show)}>{show ? <EyeOff size={17} /> : <Eye size={17} />}</button>} />{error && <p className="rounded-lg bg-rose-500/10 p-3 text-sm text-rose-300">{error}</p>}<label className="flex items-center gap-2 text-sm text-slate-400"><input type="checkbox" className="accent-blue-500" /> Remember me</label><button disabled={loading} className="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-500 px-4 py-3 font-semibold text-white hover:bg-blue-400 disabled:opacity-60"><LogIn size={18} />{loading ? "Signing in..." : "Sign in"}</button></form><div className="mt-5 flex justify-between text-sm"><Link to="/forgot-password" className="text-blue-300 hover:text-blue-200">Forgot password?</Link><span className="text-slate-400">New here? <Link to="/signup" className="text-blue-300">Create account</Link></span></div></AuthShell>;
 }
-
-export default Login;
+export function AuthShell({ title, subtitle, children }) { return <main className="grid min-h-screen place-items-center bg-[#0b1220] p-5"><motion.section initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md rounded-3xl border border-slate-800 bg-slate-900/80 p-7 shadow-2xl shadow-black/30"><div className="mb-7"><div className="grid h-11 w-11 place-items-center rounded-xl bg-blue-500 font-bold text-white">D</div><h1 className="mt-5 text-2xl font-semibold text-white">{title}</h1><p className="mt-2 text-sm text-slate-400">{subtitle}</p></div>{children}</motion.section></main>; }
+export function Field({ label, name, type = "text", action, ...props }) { return <label className="block text-sm font-medium text-slate-300">{label}<span className="relative mt-1.5 block"><input name={name} type={type} className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3.5 py-3 text-white outline-none placeholder:text-slate-600 focus:border-blue-400" {...props} />{action && <span className="absolute right-3 top-3 text-slate-400">{action}</span>}</span></label>; }

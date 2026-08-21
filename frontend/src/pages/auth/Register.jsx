@@ -1,35 +1,5 @@
-function Register() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-100">
-      <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-lg">
-        <h1 className="text-3xl font-bold text-slate-900">Create Account</h1>
-
-        <p className="mt-2 text-slate-500">Join your DevFlow workspace.</p>
-
-        <input
-          type="text"
-          placeholder="Full Name"
-          className="mt-6 w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-500"
-        />
-
-        <input
-          type="email"
-          placeholder="Email"
-          className="mt-4 w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-500"
-        />
-
-        <input
-          type="password"
-          placeholder="Password"
-          className="mt-4 w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-500"
-        />
-
-        <button className="mt-6 w-full rounded-lg bg-blue-600 px-4 py-3 font-semibold text-white hover:bg-blue-700">
-          Create Account
-        </button>
-      </div>
-    </div>
-  );
-}
-
-export default Register;
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthShell, Field } from "./Login";
+import { useAuth } from "../../context/AuthContext";
+export default function Register() { const { register } = useAuth(); const navigate = useNavigate(); const [error, setError] = useState(""); const [message, setMessage] = useState(""); const [loading, setLoading] = useState(false); const submit = async (event) => { event.preventDefault(); const form = new FormData(event.currentTarget); if (form.get("password") !== form.get("confirmPassword")) return setError("Passwords do not match"); setLoading(true); setError(""); try { const result = await register(Object.fromEntries(form)); setMessage(`${result.message}${result.data?.verificationCode ? ` Development code: ${result.data.verificationCode}` : ""}`); window.setTimeout(() => navigate("/login"), 1300); } catch (err) { setError(err.response?.data?.message || "Unable to create account."); } finally { setLoading(false); } }; return <AuthShell title="Create your account" subtitle="Start building with your team in DevFlow."><form onSubmit={submit} className="space-y-3"><Field label="Full name" name="name" required /><Field label="Username" name="username" pattern="[A-Za-z0-9_]{3,30}" required /><Field label="Email" name="email" type="email" required /><Field label="Phone number" name="phone" /><Field label="Password" name="password" type="password" minLength="8" required /><Field label="Confirm password" name="confirmPassword" type="password" minLength="8" required />{error && <p className="rounded-lg bg-rose-500/10 p-3 text-sm text-rose-300">{error}</p>}{message && <p className="rounded-lg bg-emerald-500/10 p-3 text-sm text-emerald-300">{message}</p>}<button disabled={loading} className="w-full rounded-xl bg-blue-500 px-4 py-3 font-semibold text-white hover:bg-blue-400 disabled:opacity-60">{loading ? "Creating account..." : "Create account"}</button></form><p className="mt-5 text-center text-sm text-slate-400">Already have an account? <Link to="/login" className="text-blue-300">Sign in</Link></p></AuthShell>; }

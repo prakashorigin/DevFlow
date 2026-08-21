@@ -1,10 +1,2 @@
-function Issues() {
-  return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold">Issues</h1>
-      <p className="mt-2 text-slate-500">Track and manage software issues.</p>
-    </div>
-  );
-}
-
-export default Issues;
+import ResourcePage from "../../components/common/ResourcePage";
+export default function Issues() { return <ResourcePage title="Issues" subtitle="Capture, prioritize, and resolve delivery risks." endpoint="/issues" defaultStatus="open" fields={[{ name: "title", label: "Issue title", required: true }, { name: "project", label: "Project ID", required: true }]} />; }

@@ -1,10 +1,3 @@
-function BugAnalyzer() {
-  return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold">AI Bug Analyzer</h1>
-      <p className="mt-2 text-slate-500">Analyze bugs and errors with AI.</p>
-    </div>
-  );
-}
-
-export default BugAnalyzer;
+import { useState } from "react";
+import api from "../../services/api";
+export default function BugAnalyzer() { const [result, setResult] = useState(null); const submit = async (event) => { event.preventDefault(); const { data } = await api.post("/ai/bug-analyzer", Object.fromEntries(new FormData(event.currentTarget))); setResult(data.data); }; return <div className="min-h-[calc(100vh-4rem)] bg-[#0b1220] p-6 text-white"><h1 className="text-3xl font-semibold">AI Bug Analyzer</h1><p className="mt-2 text-slate-400">Diagnose failures and turn them into actionable fixes.</p><form onSubmit={submit} className="mt-6 grid gap-4 rounded-2xl border border-slate-800 bg-slate-900 p-5"><textarea name="code" placeholder="Relevant code" className="min-h-36 rounded-xl border border-slate-700 bg-slate-950 p-3 font-mono text-sm" /><textarea name="error" placeholder="Error message / stack trace" className="min-h-28 rounded-xl border border-slate-700 bg-slate-950 p-3 text-sm" /><textarea name="expectedBehavior" placeholder="Expected behavior" className="min-h-20 rounded-xl border border-slate-700 bg-slate-950 p-3 text-sm" /><button className="w-fit rounded-xl bg-blue-500 px-4 py-2.5 font-semibold">Analyze bug</button></form>{result && <section className="mt-6 grid gap-4 md:grid-cols-2">{Object.entries(result).map(([key, value]) => <article key={key} className="rounded-xl border border-slate-800 bg-slate-900 p-5"><h2 className="font-semibold capitalize">{key.replace(/([A-Z])/g, " $1")}</h2><p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-slate-300">{value}</p></article>)}</section>}</div>; }
