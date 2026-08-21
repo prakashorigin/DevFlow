@@ -39,6 +39,15 @@ Frontend: `http://localhost:4002`
 Backend: `http://localhost:6002`
 Health: `GET /api/health`
 
+### Registration troubleshooting
+
+The client and server are configured to use ports `4002` and `6002` respectively. If account creation still fails:
+
+1. Run the backend first with `cd backend && npm run dev`.
+2. In development, DevFlow uses `DEV_MONGODB_URI=mongodb://127.0.0.1:27017/devflow` when present. Otherwise, set `MONGODB_URI` to a working MongoDB URI. Do not include angle brackets around an Atlas password, and URL-encode special password characters.
+3. For MongoDB Atlas, allow your current IP address in Network Access and confirm the cluster is running.
+4. Open `http://localhost:6002/api/health`; its `data.database` value must be `connected` before registration can persist users.
+
 ## API groups
 
 - `/api/auth` — register, login, logout, verification, refresh, password reset

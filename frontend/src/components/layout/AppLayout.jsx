@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
+import Footer from "./Footer";
 
 function AppLayout() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -27,6 +28,7 @@ function AppLayout() {
         <main>
           <Outlet />
         </main>
+        <Footer />
       </div>
     </div>
   );

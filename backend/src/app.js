@@ -24,12 +24,15 @@ const app = express();
 app.use(helmet());
 
 // CORS
-app.use(
-  cors({
-    origin: env.clientUrl,
-    credentials: true,
-  }),
-);
+const allowedOrigins = new Set([env.clientUrl, "http://localhost:4001", "http://localhost:4002"]);
+app.use(cors({
+  origin(origin, callback) {
+    // Requests without Origin are tools such as curl/Postman.
+    if (!origin || allowedOrigins.has(origin)) return callback(null, true);
+    return callback(new Error("This origin is not allowed by DevFlow CORS policy"));
+  },
+  credentials: true,
+}));
 
 // Request logging
 app.use(morgan("dev"));

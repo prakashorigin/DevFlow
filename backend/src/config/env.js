@@ -7,7 +7,12 @@ const env = {
 
   clientUrl: process.env.CLIENT_URL || "http://localhost:4002",
 
-  mongoUri: process.env.MONGODB_URI || "",
+  // A local development database is useful when an Atlas URI is unavailable
+  // or intentionally kept for production. Production continues to use
+  // MONGODB_URI.
+  mongoUri: process.env.NODE_ENV === "development" && process.env.DEV_MONGODB_URI
+    ? process.env.DEV_MONGODB_URI
+    : process.env.MONGODB_URI || "",
 
   jwtSecret: process.env.JWT_SECRET || "development_secret",
 

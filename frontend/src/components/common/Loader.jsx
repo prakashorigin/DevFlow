@@ -1,0 +1,1 @@
+export default function Loader({ label = "Loading…" }) { return <div className="grid min-h-32 place-items-center gap-3 text-sm text-slate-400"><span className="h-6 w-6 animate-spin rounded-full border-2 border-slate-600 border-t-blue-400" />{label}</div>; }

@@ -1,0 +1,1 @@
+export default function Footer() { return <footer className="border-t border-slate-800 bg-[#0b1220] px-4 py-4 text-center text-xs text-slate-500 sm:px-6">© {new Date().getFullYear()} DevFlow. Plan, build, and deliver together.</footer>; }

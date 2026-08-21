@@ -1,0 +1,4 @@
+import { Mail, Shield } from "lucide-react";
+import { initials } from "../../utils/helpers";
+
+export default function MemberCard({ member }) { return <article className="rounded-2xl border border-slate-800 bg-slate-900 p-5"><div className="flex items-center gap-3"><div className="grid h-11 w-11 place-items-center rounded-full bg-blue-500/20 font-semibold text-blue-200">{member.avatar ? <img src={member.avatar} alt="" className="h-full w-full rounded-full object-cover" /> : initials(member.name)}</div><div className="min-w-0"><h2 className="truncate font-medium text-white">{member.name}</h2><p className="truncate text-sm text-slate-400">{member.jobTitle || member.username}</p></div></div><div className="mt-4 space-y-2 text-sm text-slate-400"><p className="flex items-center gap-2"><Mail size={15} />{member.email}</p><p className="flex items-center gap-2 capitalize text-blue-300"><Shield size={15} />{member.role}</p></div></article>; }

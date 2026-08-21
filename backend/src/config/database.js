@@ -9,6 +9,7 @@ const connectionState = {
 };
 
 export const getDatabaseStatus = () => connectionState[mongoose.connection.readyState];
+export const isDatabaseConnected = () => mongoose.connection.readyState === 1;
 
 const connectDatabase = async () => {
   if (!env.mongoUri) {

@@ -1,0 +1,2 @@
+import ProjectCard from "./ProjectCard";
+export default function RecentProjects({ projects = [], onSelect }) { return <section><div className="mb-4 flex items-center justify-between"><h2 className="text-lg font-semibold text-white">Recent projects</h2></div><div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">{projects.slice(0, 3).map((project) => <ProjectCard key={project._id} project={project} onSelect={onSelect} />)}</div></section>; }

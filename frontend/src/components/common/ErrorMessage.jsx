@@ -1,0 +1,1 @@
+export default function ErrorMessage({ children }) { return children ? <p role="alert" className="rounded-xl border border-rose-500/20 bg-rose-500/10 p-3 text-sm text-rose-200">{children}</p> : null; }
